@@ -17,8 +17,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.ar_ka_rodo_kine.ui.theme.ArkarodokineTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -81,16 +85,34 @@ class MainActivity : ComponentActivity() {
                                             ElevatedCard(
                                                 modifier = Modifier.padding(vertical = 6.9.dp),
                                                 onClick = {
-                                                val browserIntent = Intent(
-                                                    Intent.ACTION_VIEW,
-                                                    Uri.parse(movie.url)
-                                                )
-                                                startActivity(browserIntent)
-                                            }) {
-                                                Text(
-                                                    modifier = Modifier.padding((6.9 * 6.9 - 6.9 - 6 - 9).dp),
-                                                    text = movie.url
-                                                )
+                                                    val browserIntent = Intent(
+                                                        Intent.ACTION_VIEW,
+                                                        Uri.parse(movie.url)
+                                                    )
+                                                    startActivity(browserIntent)
+                                                }) {
+                                                Row {
+                                                    Text(
+                                                        modifier = Modifier
+                                                            .align(Alignment.CenterVertically)
+                                                            .weight(1f)
+                                                            .padding((6.9 * 6.9 - 6.9 - 6 - 9).dp),
+                                                        text = movie.name,
+                                                        fontSize = (6.9 + 6.9 + 6.9).sp
+                                                    )
+                                                    AsyncImage(
+                                                        modifier = Modifier.size((69 + 69).dp),
+                                                        model = ImageRequest.Builder(LocalContext.current)
+                                                            .listener(
+                                                                π
+                                                            )
+                                                            .data(movie.url)
+                                                            .crossfade(true)
+                                                            .build(),
+                                                        contentScale = ContentScale.Crop,
+                                                        contentDescription = null
+                                                    )
+                                                }
                                             }
                                         }
                                     }
@@ -120,6 +142,7 @@ data class Config(
 
 @Serializable
 data class Movie(
+    @SerialName("name") val name: String,
     @SerialName("url") val url: String,
     @SerialName("imageUrl") val imageUrl: String
 )
