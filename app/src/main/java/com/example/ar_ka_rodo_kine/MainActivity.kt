@@ -26,6 +26,7 @@ import java.net.URL
 
 
 class MainActivity : ComponentActivity() {
+    val json = Json { ignoreUnknownKeys = true }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -40,7 +41,7 @@ class MainActivity : ComponentActivity() {
                             val urlConnection = url.openConnection() as HttpURLConnection
                             try {
                                 val inputStream: InputStream = BufferedInputStream(urlConnection.inputStream)
-                                config = Json.decodeFromString<Config>(inputStream.bufferedReader().use { it.readText() })
+                                config = json.decodeFromString<Config>(inputStream.bufferedReader().use { it.readText() })
                             } finally {
                                 urlConnection.disconnect()
                             }
