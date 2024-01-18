@@ -64,10 +64,14 @@ class MainActivity : ComponentActivity() {
                         ) {
                             val config = config!!
                             if (config.enabled) {
-                                Text(
-                                    fontSize = 69.sp,
-                                    text = "TAIP!",
-                                )
+                                Column(modifier = Modifier.fillMaxSize()) {
+                                    Text(
+                                        modifier = Modifier
+                                            .align(Alignment.CenterHorizontally)
+                                            .padding(69.dp),
+                                        fontSize = 69.sp,
+                                        text = "TAIP!",
+                                    )
                                 val lazyListState = rememberLazyListState()
                                 LazyColumn(
                                     state = lazyListState,
@@ -87,17 +91,15 @@ class MainActivity : ComponentActivity() {
                                             )
                                         }
                                     }
-                                }
+                                }}
                             } else {
-                                Column(modifier = Modifier.fillMaxSize()) {
-                                    Text(
-                                        modifier = Modifier
-                                            .align(Alignment.CenterHorizontally)
-                                            .padding(69.dp),
-                                        fontSize = 69.sp,
-                                        text = "NE...",
-                                    )
-                                }
+                                Text(
+                                    modifier = Modifier
+                                        .align(Alignment.Center)
+                                        .padding(69.dp),
+                                    fontSize = 69.sp,
+                                    text = "NE...",
+                                )
                             }
                         }
                     }
