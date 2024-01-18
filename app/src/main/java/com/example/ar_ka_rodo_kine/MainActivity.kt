@@ -107,7 +107,7 @@ class MainActivity : ComponentActivity() {
                                                             .listener(
                                                                 onError = { _, error -> Log.e("Image", "Image loading failed: ${error.throwable.message}") }
                                                             )
-                                                            .data(movie.url)
+                                                            .data(movie.imageUrl)
                                                             .crossfade(true)
                                                             .build(),
                                                         contentScale = ContentScale.Crop,
