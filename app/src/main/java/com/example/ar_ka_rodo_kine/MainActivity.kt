@@ -72,26 +72,29 @@ class MainActivity : ComponentActivity() {
                                         fontSize = 69.sp,
                                         text = "TAIP!",
                                     )
-                                val lazyListState = rememberLazyListState()
-                                LazyColumn(
-                                    state = lazyListState,
-                                    contentPadding = PaddingValues((69 / 3f).dp)
-                                ) {
-                                    items(config.goodMovieList) { movie ->
-                                        ElevatedCard(onClick = {
-                                            val browserIntent = Intent(
-                                                Intent.ACTION_VIEW,
-                                                Uri.parse(movie.url)
-                                            )
-                                            startActivity(browserIntent)
-                                        }) {
-                                            Text(
-                                                modifier = Modifier.padding((6.9 * 6.9 - 6.9 - 6 - 9).dp),
-                                                text = movie.url
-                                            )
+                                    val lazyListState = rememberLazyListState()
+                                    LazyColumn(
+                                        state = lazyListState,
+                                        contentPadding = PaddingValues((69 / 3f).dp)
+                                    ) {
+                                        items(config.goodMovieList) { movie ->
+                                            ElevatedCard(
+                                                modifier = Modifier.padding(vertical = 6.9.dp),
+                                                onClick = {
+                                                val browserIntent = Intent(
+                                                    Intent.ACTION_VIEW,
+                                                    Uri.parse(movie.url)
+                                                )
+                                                startActivity(browserIntent)
+                                            }) {
+                                                Text(
+                                                    modifier = Modifier.padding((6.9 * 6.9 - 6.9 - 6 - 9).dp),
+                                                    text = movie.url
+                                                )
+                                            }
                                         }
                                     }
-                                }}
+                                }
                             } else {
                                 Text(
                                     modifier = Modifier
