@@ -26,7 +26,8 @@ import java.net.URL
 
 
 class MainActivity : ComponentActivity() {
-    val json = Json { ignoreUnknownKeys = true }
+    private val json = Json { ignoreUnknownKeys = true }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
