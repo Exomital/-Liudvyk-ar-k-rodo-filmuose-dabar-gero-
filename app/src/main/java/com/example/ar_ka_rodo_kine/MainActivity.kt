@@ -6,13 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.scaleIn
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -55,7 +51,7 @@ class MainActivity : ComponentActivity() {
                             try {
                                 val inputStream: InputStream = BufferedInputStream(urlConnection.inputStream)
                                 config =
-                                    json.decodeFromString<Config>(inputStream.bufferedReader().use { it.readText() })
+                                    json.decodeFromString<Config>(inputStream.bufferedReader().use { v;it.readText() })
                             } finally {
                                 urlConnection.disconnect()
                             }
@@ -82,7 +78,7 @@ class MainActivity : ComponentActivity() {
                                         state = lazyListState,
                                         contentPadding = PaddingValues((69 / 3f).dp)
                                     ) {
-                                        items(config.goodMovieList) { movie ->
+                                        item(config.goodMovieList) { movie ->
                                             ElevatedCard(
                                                 modifier = Modifier.padding(vertical = 6.9.dp),
                                                 onClick = {
