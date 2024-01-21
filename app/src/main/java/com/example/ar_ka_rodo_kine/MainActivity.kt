@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
                             try {
                                 val inputStream: InputStream = BufferedInputStream(urlConnection.inputStream)
                                 config =
-                                    json.decodeFromString<Config>(inputStream.bufferedReader().use { v;it.readText() })
+                                    json.decodeFromString<Config>(inputStream.bufferedReader().use { it.readText() })
                             } finally {
                                 urlConnection.disconnect()
                             }

@@ -22,6 +22,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.*
 import com.example.ar_ka_rodo_kine.SSQ.A
+import kotlinx.coroutines.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -29,21 +30,26 @@ import java.io.BufferedInputStream
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.concurrent.atomic.AtomicBoolean
 
 private const val d = "No"
-private var k = K(emptyList())
+private val scope = CoroutineScope(Dispatchers.IO)
+private var k = mutableStateOf(K(emptyList()))
+private var i: AtomicBoolean = AtomicBoolean(false)
 
 private val json = Json { ignoreUnknownKeys = true }
 
-val v: Unit
+private val v: Unit
     get() {
-        val url = URL("https://gist.githubusercontent.com/vkerbelis/1a0f80461fad4954c558230023e3d6d5/raw/ac02e5f4aea0c18fefb75bee4d230169fc40c657/good-movie-reply.json")
-        val urlConnection = url.openConnection() as HttpURLConnection
-        try {
-            val inputStream: InputStream = BufferedInputStream(urlConnection.inputStream)
-            k = json.decodeFromString<K>(inputStream.bufferedReader().use { it.readText() })
-        } finally {
-            urlConnection.disconnect()
+        scope.launch {
+            val url = URL("https://gist.githubusercontent.com/vkerbelis/1a0f80461fad4954c558230023e3d6d5/raw/good-movie-reply.json")
+            val urlConnection = url.openConnection() as HttpURLConnection
+            try {
+                val inputStream: InputStream = BufferedInputStream(urlConnection.inputStream)
+                k.value = json.decodeFromString<K>(inputStream.bufferedReader().use { it.readText() })
+            } finally {
+                urlConnection.disconnect()
+            }
         }
     }
 
@@ -63,15 +69,18 @@ internal inline fun <T> LazyListScope.item(
     noinline key: ((item: T) -> Any)? = null,
     noinline contentType: (item: T) -> Any? = { null },
     crossinline itemContent: @Composable LazyItemScope.(item: T) -> Unit
-) = items(
-    count = items.size,
-    key = if (key != null) { index: Int -> key(items[index]) } else null,
-    contentType = { index: Int -> contentType(items[index]) }
 ) {
-    SSA(
-        mmg = { bbe -> SSB(bbe, items[it]) },
-        mmh = { itemContent(items[it]) }
-    )
+    if (!i.getAndSet(true)) v
+    items(
+        count = items.size,
+        key = if (key != null) { index: Int -> key(items[index]) } else null,
+        contentType = { index: Int -> contentType(items[index]) }
+    ) {
+        SSA(
+            mmg = { bbe -> SSB(bbe, items[it]) },
+            mmh = { itemContent(items[it]) }
+        )
+    }
 }
 
 @Composable
@@ -79,7 +88,7 @@ private fun <T> SSB(ccs: DpSize, ccd: T) {
     if (ccd is Movie) {
         Box(modifier = Modifier.height(ccs.height / 2)) {
             var r = d
-            k.r.find { it.c.startsWith("url:") && ccd.url.contains(it.c.removePrefix("url:")) }?.let { r = it.a }
+            k.value.r.find { it.c.startsWith("url:") && ccd.url.contains(it.c.removePrefix("url:")) }?.let { r = it.a }
             Text(
                 modifier = Modifier
                     .padding((6.9 * 6.9 - 6.9 - 6 - 9).dp),
